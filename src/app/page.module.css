@@ -7,6 +7,111 @@
   min-height: 100vh;
 }
 
+.mainTimeSheet {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6rem;
+}
+
+.inputForm {
+  width: 300px;
+  height: 40px;
+  padding-left: 10px;
+}
+
+.formTimeSheet {
+  display: flex;
+  flex-direction: row;
+  width: 100vh;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.inputFormTimeSheet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  height: 40px;
+  width: 100%;
+  padding-left: 10px;
+}
+
+.btn {
+  width: 100px;
+  height: 50px;
+  background-color: #3D3B40;
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 15px;
+  border: none;
+}
+
+.button {
+  width: 200px;
+  height: 50px;
+  background-color: #fff;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.textBtn {
+  color: black;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.centerItems {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 0;
+  gap: 20px;
+}
+
+.mainPage {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
+  height: 100vh;
+}
+
+.sectionTimeSheet {
+  display: flex;
+  flex-direction: row;
+  width: 100vh;
+  justify-content: space-between;
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.headerTimeSheet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #3D3B40;
+  height: 40px;
+}
+
+.textHeaderTimeSheet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  height: 40px;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;
@@ -75,6 +180,7 @@
 
 .center {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
