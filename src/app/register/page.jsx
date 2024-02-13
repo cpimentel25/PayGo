@@ -10,7 +10,7 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const api = process.env.API_URL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
   //Validación de email
@@ -43,6 +43,7 @@ function RegisterPage() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(userData),
       });
 

@@ -10,7 +10,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const api = process.env.API_URL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
   const { login } = useAuthStore();
@@ -29,6 +29,7 @@ function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(userData),
       });
 

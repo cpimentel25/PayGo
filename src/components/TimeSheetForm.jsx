@@ -2,8 +2,9 @@ import React, { useState } from "react";
 
 import styles from "../app/page.module.css";
 
-function TimeSheetForm({ userData, token }) {
-  const api = process.env.API_URL;
+function TimeSheetForm({ userData, token, fetchTimeSheets }) {
+  const userId = userData?.sub;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const [entries, setEntries] = useState([
     {
@@ -12,7 +13,7 @@ function TimeSheetForm({ userData, token }) {
       hours: 1,
       totalPay: "",
       description: "PayGo",
-      userId: userData.sub,
+      userId: userId,
     },
   ]);
 
@@ -25,7 +26,7 @@ function TimeSheetForm({ userData, token }) {
         hours: 1,
         totalPay: 0,
         description: "PayGo",
-        userId: userData.sub,
+        userId: userId,
       },
     ]);
   };
@@ -48,21 +49,43 @@ function TimeSheetForm({ userData, token }) {
     setEntries(updatedEntries);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Validación antes de llamar a onSubmit
+    const isValid = entries.every((entry) => {
+      const hourlyRateValid = parseFloat(entry.hourlyRate) >= 12;
+      const hoursValid = entry.hours > 0;
+      const totalPayValid = entry.hourlyRate * entry.hours >= 100;
+
+      if (!hourlyRateValid) {
+        alert("La tarifa por hora de cada entrada debe ser al menos $12.00.");
+      }
+      if (!hoursValid) {
+        alert("No debe haber filas con 'Hours' vacías.");
+      }
+      if (!totalPayValid) {
+        alert("El pago total de cada empleado no debe ser inferior a $100.00.");
+      }
+
+      return hourlyRateValid && hoursValid && totalPayValid;
+    });
+
+    if (!isValid) {
+      return; // Detener si la validación falla
+    }
 
     // Envio de datos
-    try {
-      const onSubmit = async () => {
+    const onSubmit = async () => {
+      try {
         const response = await fetch(`${api}/time-sheet`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(entries[0]),
+          credentials: "include",
+          body: JSON.stringify(entries),
         });
 
         if (!response.ok) {
@@ -71,13 +94,16 @@ function TimeSheetForm({ userData, token }) {
 
         const data = await response.json();
         console.log("🚀 ~ Hoja de tiempo creada:", data);
-      };
+        alert("🚀 ~ Hoja de tiempo creada ~ 🚀");
 
-      onSubmit(entries);
-    } catch (error) {
-      console.error("Error al crear la hoja de tiempo:", error);
-      alert(error.message);
-    }
+        await fetchTimeSheets();
+      } catch (error) {
+        console.error("Error al crear la hoja de tiempo:", error.message);
+        alert(error.message);
+      }
+    };
+
+    await onSubmit();
   };
 
   return (
@@ -97,7 +123,7 @@ function TimeSheetForm({ userData, token }) {
             />
           </div>
           <div className={styles.headerSection}>
-            <p className={styles.headerTimeSheet}>Hours</p>
+            <p className={styles.headerTimeSheet}>Hourly Rate</p>
             <input
               className={styles.inputFormTimeSheet}
               type="text"
@@ -121,7 +147,7 @@ function TimeSheetForm({ userData, token }) {
             />
           </div>
           <div className={styles.headerSection}>
-            <p className={styles.headerTimeSheet}>Hourly Rate</p>
+            <p className={styles.headerTimeSheet}>Hours</p>
             <input
               className={styles.inputFormTimeSheet}
               type="number"
@@ -133,6 +159,7 @@ function TimeSheetForm({ userData, token }) {
               }
             />
           </div>
+
           <div className={styles.headerSection}>
             <p className={styles.headerTimeSheet}>Total Pay</p>
             <input
@@ -145,17 +172,19 @@ function TimeSheetForm({ userData, token }) {
           </div>
         </div>
       ))}
-      <button className={styles.btn} type="button" onClick={addEntry}>
-        Add Entry
-      </button>
-      {entries.length > 1 && (
-        <button className={styles.btn} type="button" onClick={removeEntry}>
-          Remove Entry
+      <div>
+        <button className={styles.btn} type="button" onClick={addEntry}>
+          Add Entry
         </button>
-      )}
-      <button className={styles.btn} type="submit">
-        Submit
-      </button>
+        {entries.length > 1 && (
+          <button className={styles.btn} type="button" onClick={removeEntry}>
+            Remove Entry
+          </button>
+        )}
+        <button className={styles.btn} type="submit">
+          Submit
+        </button>
+      </div>
     </form>
   );
 }
