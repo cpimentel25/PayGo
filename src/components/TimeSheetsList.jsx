@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import styles from "../app/page.module.css";
 
 function TimeSheetsList({ userData, timeSheets, token, fetchTimeSheets }) {
+  const router = useRouter();
   const api = process.env.NEXT_PUBLIC_API_URL;
   const { logout } = useAuthStore();
-  const router = useRouter();
 
   const logOut = () => {
     router.push("/");

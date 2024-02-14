@@ -2,20 +2,24 @@ import React, { useState } from "react";
 
 import styles from "../app/page.module.css";
 
+const initialEntries = [
+  {
+    employeeName: "",
+    hourlyRate: 12.0,
+    hours: 1,
+    totalPay: "",
+    description: "PayGo",
+    userId: "",
+  },
+];
+
 function TimeSheetForm({ userData, token, fetchTimeSheets }) {
   const userId = userData?.sub;
   const api = process.env.NEXT_PUBLIC_API_URL;
 
-  const [entries, setEntries] = useState([
-    {
-      employeeName: "",
-      hourlyRate: 12.0,
-      hours: 1,
-      totalPay: "",
-      description: "PayGo",
-      userId: userId,
-    },
-  ]);
+  const [entries, setEntries] = useState(
+    initialEntries.map((entry) => ({ ...entry, userId: userId }))
+  );
 
   const addEntry = () => {
     setEntries([
@@ -97,6 +101,11 @@ function TimeSheetForm({ userData, token, fetchTimeSheets }) {
         alert("🚀 ~ Hoja de tiempo creada ~ 🚀");
 
         await fetchTimeSheets();
+
+        // Restablecer el estado de 'entries' a su estado inicial
+        setEntries(
+          initialEntries.map((entry) => ({ ...entry, userId: userId }))
+        );
       } catch (error) {
         console.error("Error al crear la hoja de tiempo:", error.message);
         alert(error.message);

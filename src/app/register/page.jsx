@@ -53,7 +53,6 @@ function RegisterPage() {
         return;
       }
 
-      console.log("🚀 Register:", email, password, isAdmin);
       alert("Usuario registrado con éxito");
 
       // Redirigir o limpiar el formulario aquí
